@@ -6,17 +6,20 @@ namespace LegacyApp
     {
         private IClientAccessor clientAccessor;
         private ITimeProvider timeProvider;
+        private IUserDataStore userDataStore;
 
-        internal UserService(IClientAccessor clientAccessor, ITimeProvider timeProvider)
+        internal UserService(IClientAccessor clientAccessor, ITimeProvider timeProvider, IUserDataStore userDataStore)
         {
             this.clientAccessor = clientAccessor;
             this.timeProvider = timeProvider;
+            this.userDataStore = userDataStore;
         }
 
         public UserService()
         {
             this.clientAccessor = new DefaultClientAccessor();
             this.timeProvider = new TimeProvider();
+            this.userDataStore = new UserDataStore();
         }
 
         public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId)
@@ -27,7 +30,7 @@ namespace LegacyApp
                 LastName = lastName,
                 DateOfBirth = dateOfBirth,
                 EmailAddress = email,
-                CurrentTime = DateTime.Now
+                CurrentTime = timeProvider.Now
             };
             return userCreationParameters.Valid() && CreateUserForClient(clientAccessor.GetClientById(clientId), userCreationParameters);
         }
@@ -42,7 +45,7 @@ namespace LegacyApp
                 FirstName = userCreationParameters.FirstName,
                 LastName = userCreationParameters.LastName
             };
-            return AssignCreditLimitToUser(user, client.Type) && StoreUser(user);
+            return AssignCreditLimitToUser(user, client.Type) && userDataStore.AddUser(user);
         }
 
         private static bool AssignCreditLimitToUser(User user, string clientType)
@@ -53,12 +56,6 @@ namespace LegacyApp
 
             user.HasCreditLimit = creditLimit.Present;
             user.CreditLimit = creditLimit.CreditLimit;
-            return true;
-        }
-
-        private static bool StoreUser(User user)
-        {
-            UserDataAccess.AddUser(user);
             return true;
         }
 
