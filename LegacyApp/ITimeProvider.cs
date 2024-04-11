@@ -2,12 +2,12 @@ using System;
 
 namespace LegacyApp
 {
-    public interface ITimeProvider
+    interface ITimeProvider
     {
         DateTime Now();
     }
 
-    public class TimeProvider
+    class TimeProvider
     {
 
     }

@@ -2,10 +2,10 @@ using System;
 
 namespace LegacyApp
 {
-    public class UserCreditLimitAccessor
+    class UserCreditLimitAccessor : IUserCreditLimitAccessor
     {
         public string UserLastName { get; set; }
-        public DateTime UserDateOfBirth{ get; set; }
+        public DateTime UserDateOfBirth { get; set; }
 
         public int AccessCreditLimit()
         {

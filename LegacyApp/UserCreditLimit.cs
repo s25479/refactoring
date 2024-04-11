@@ -1,6 +1,6 @@
 namespace LegacyApp
 {
-    public class UserCreditLimit
+    class UserCreditLimit
     {
         public bool Present { get; set; }
         public int CreditLimit { get; set; }

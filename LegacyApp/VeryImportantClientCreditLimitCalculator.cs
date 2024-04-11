@@ -1,6 +1,6 @@
 namespace LegacyApp
 {
-    public class VeryImportantClientCreditLimitCalculator
+    class VeryImportantClientCreditLimitCalculator : IClientCreditLimitCalculator
     {
         public UserCreditLimit GetCreditLimit()
         {

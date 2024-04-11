@@ -2,7 +2,7 @@ using System;
 
 namespace LegacyApp
 {
-    public class UserCreationParameters
+    class UserCreationParameters
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
