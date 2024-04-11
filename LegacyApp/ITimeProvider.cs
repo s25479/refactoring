@@ -4,11 +4,6 @@ namespace LegacyApp
 {
     interface ITimeProvider
     {
-        DateTime Now();
-    }
-
-    class TimeProvider
-    {
-
+        DateTime Now { get; }
     }
 }

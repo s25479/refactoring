@@ -4,6 +4,21 @@ namespace LegacyApp
 {
     public class UserService
     {
+        private IClientAccessor clientAccessor;
+        private ITimeProvider timeProvider;
+
+        internal UserService(IClientAccessor clientAccessor, ITimeProvider timeProvider)
+        {
+            this.clientAccessor = clientAccessor;
+            this.timeProvider = timeProvider;
+        }
+
+        public UserService()
+        {
+            this.clientAccessor = new DefaultClientAccessor();
+            this.timeProvider = new TimeProvider();
+        }
+
         public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId)
         {
             var userCreationParameters = new UserCreationParameters
@@ -14,7 +29,7 @@ namespace LegacyApp
                 EmailAddress = email,
                 CurrentTime = DateTime.Now
             };
-            return userCreationParameters.Valid() && CreateUserForClient(new ClientRepository().GetById(clientId), userCreationParameters);
+            return userCreationParameters.Valid() && CreateUserForClient(clientAccessor.GetClientById(clientId), userCreationParameters);
         }
       
         private bool CreateUserForClient(Client client, UserCreationParameters userCreationParameters)
@@ -59,7 +74,8 @@ namespace LegacyApp
 
         private static ClientCreditLimitCalculatorFactory GetClientCreditLimitCalculatorFactory(User user)
         {
-            return new ClientCreditLimitCalculatorFactory{
+            return new ClientCreditLimitCalculatorFactory
+            {
                 CreditLimitAccessor = new UserCreditLimitAccessor
                 {
                     UserLastName = user.LastName,
